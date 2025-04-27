@@ -67,9 +67,6 @@ const EnrollmentSTable = () => {
       <div className="overflow-x-auto">
         <div className="flex justify-between items-center p-4">
           <h1 className="font-bold text-xl">Enrollments List</h1>
-          <button className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors">
-            Add New Enrollment
-          </button>
         </div>
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
