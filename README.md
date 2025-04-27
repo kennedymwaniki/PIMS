@@ -2,6 +2,17 @@
 
 ![CHIMS Logo](frontend/public/vite.svg)
 
+> ## ⚠️ 📢 IMPORTANT API NOTICE 📢 ⚠️
+>
+> **The backend API (https://pim-backend-5zbm.onrender.com) is deployed on Render's free tier, which has the following limitations:**
+>
+> - 🔄 **Sleep Mode**: The server automatically spins down after periods of inactivity
+> - ⏱️ **Cold Start Delay**: First requests after inactivity may take **50-60 seconds** to respond
+> - 🚦 **Be Patient**: If the application seems unresponsive on initial load, please wait for the backend to wake up
+> - 🔁 **Subsequent Requests**: Once awake, the server will respond normally with fast response times
+>
+> This is normal behavior for free-tier services and not an indication of application errors.
+
 ## Overview
 
 CHIMS is a robust health information management system designed to streamline healthcare operations, patient management, and program administration. The platform provides a comprehensive solution for healthcare professionals to manage client records, schedule appointments, enroll clients in healthcare programs, and track overall facility performance through intuitive dashboards.
