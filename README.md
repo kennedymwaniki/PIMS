@@ -4,7 +4,7 @@
 
 > ## ⚠️ 📢 IMPORTANT API NOTICE 📢 ⚠️
 >
-> **The backend API (https://pim-backend-5zbm.onrender.com) is deployed on Render's free tier, which has the following limitations:**
+> **The backend API (https://pim-backend-5zbm.onrender.com/api) is deployed on Render's free tier, which has the following limitations:**
 >
 > - 🔄 **Sleep Mode**: The server automatically spins down after periods of inactivity
 > - ⏱️ **Cold Start Delay**: First requests after inactivity may take **50-60 seconds** to respond
