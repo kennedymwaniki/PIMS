@@ -24,9 +24,5 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-# misc
-.DS_Store
-.dist/
-.dist
-node_modules
-.dist
+dist/
+dist-ssr/
