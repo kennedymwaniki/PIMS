@@ -137,9 +137,7 @@ const Login = () => {
           <h1 className="text-3xl font-bold text-[#454BE7] mb-2">
             Welcome back!
           </h1>
-          <p className="text-gray-600 mb-8">
-            Sign in to your CarePulse account
-          </p>
+          <p className="text-gray-600 mb-8">Sign in to your account</p>
 
           {notification && (
             <div

@@ -1,33 +1,35 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { format, parseISO } from "date-fns";
-import { getAllPrograms } from "../services/programsService";
-import { ProgramResponse } from "../types/types";
+import { getAllAppointments } from "../services/AppointmentsService";
+import { AppointmentResponse } from "../types/types";
 
-const ProgramsTable = () => {
-  const [programs, setPrograms] = useState<ProgramResponse[]>([]);
+const AppointmentsTable = () => {
+  const [appointments, setAppointments] = useState<AppointmentResponse[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchPrograms = async () => {
+    const fetchAppointments = async () => {
       setLoading(true);
       setError(null);
 
       try {
-        const response = await getAllPrograms();
-        setPrograms(response);
+        const response = await getAllAppointments();
+        setAppointments(response);
       } catch (error) {
         setError(
-          error instanceof Error ? error.message : "Failed to fetch programs"
+          error instanceof Error
+            ? error.message
+            : "Failed to fetch appointments"
         );
-        toast.error("An error occurred while fetching programs");
+        toast.error("An error occurred while fetching appointments");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchPrograms();
+    fetchAppointments();
   }, []);
 
   if (loading) {
@@ -54,10 +56,10 @@ const ProgramsTable = () => {
     );
   }
 
-  if (programs.length === 0) {
+  if (appointments.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-8">
-        <p className="mt-4 text-gray-500">No programs found</p>
+        <p className="mt-4 text-gray-500">No appointments found</p>
       </div>
     );
   }
@@ -66,9 +68,9 @@ const ProgramsTable = () => {
     <div className="bg-white rounded-md shadow-md ml-2 mr-4 mt-4">
       <div className="overflow-x-auto">
         <div className="flex justify-between items-center p-4">
-          <h1 className="font-bold text-xl">Programs List</h1>
+          <h1 className="font-bold text-xl">Appointments List</h1>
           <button className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors">
-            Add New Program
+            Add New Appointment
           </button>
         </div>
         <table className="min-w-full divide-y divide-gray-200">
@@ -78,52 +80,74 @@ const ProgramsTable = () => {
                 ID
               </th>
               <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Name
+                Date
+              </th>
+              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Status
               </th>
               <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Description
               </th>
               <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Start Date
+                Client Name
               </th>
               <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                End Date
+                Doctor
               </th>
               <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Status
+                Doctor Status
+              </th>
+              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Actions
               </th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {programs.map((program, index) => (
+            {appointments.map((appointment, index) => (
               <tr
-                key={program.id}
+                key={appointment.id}
                 className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}
               >
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {program.id}
+                  {appointment.id}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {program.name}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {program.description}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {format(parseISO(program.startdate), "yyyy-MM-dd")}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {format(parseISO(program.enddate), "yyyy-MM-dd")}
+                  {format(parseISO(appointment.appointmentdate), "yyyy-MM-dd")}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm">
                   <span
                     className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                      program.isActive
+                      appointment.status === "scheduled"
+                        ? "bg-yellow-100 text-yellow-800"
+                        : appointment.status === "completed"
+                        ? "bg-green-100 text-green-800"
+                        : appointment.status === "cancelled"
+                        ? "bg-red-100 text-red-800"
+                        : "bg-gray-100 text-gray-800"
+                    }`}
+                  >
+                    {appointment.status.charAt(0).toUpperCase() +
+                      appointment.status.slice(1)}
+                  </span>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  {appointment.description}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  {appointment.client.fullname}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  {appointment.doctor.name}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm">
+                  <span
+                    className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                      appointment.doctor.isActive
                         ? "bg-green-100 text-green-800"
                         : "bg-red-100 text-red-800"
                     }`}
                   >
-                    {program.isActive ? "Active" : "Inactive"}
+                    {appointment.doctor.isActive ? "Active" : "Inactive"}
                   </span>
                 </td>
               </tr>
@@ -135,4 +159,4 @@ const ProgramsTable = () => {
   );
 };
 
-export default ProgramsTable;
+export default AppointmentsTable;

@@ -3,7 +3,31 @@ import { eq } from "drizzle-orm";
 import { appointments, TIAppointments } from "../drizzle/schema";
 
 export const getAppointmentsService = async () => {
-  const appointments = await db.query.appointments.findMany();
+  const appointments = await db.query.appointments.findMany({
+    columns: {
+      id: true,
+      appointmentdate: true,
+      status: true,
+      description: true,
+    },
+    with: {
+      client: {
+        columns: {
+          id: true,
+          fullname: true,
+          gender: true,
+          phone: true,
+        },
+      },
+      doctor: {
+        columns: {
+          id: true,
+          name: true,
+          isActive: true,
+        },
+      },
+    },
+  });
   return appointments;
 };
 

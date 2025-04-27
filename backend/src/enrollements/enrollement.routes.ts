@@ -1,3 +1,4 @@
+import { doctorRoleAuth } from "./../middleware/authBearer";
 import { Hono } from "hono";
 import { getAllEnrollments, CreateEnrollment } from "./enrollement.controller";
 // import { bearerAuth } from "../middleware/authBearer"; // Uncomment if auth is needed

@@ -71,7 +71,13 @@ const ClientsTable = () => {
   return (
     <div className="bg-white rounded-md shadow-md ml-2 mr-4 mt-4">
       <div className="overflow-x-auto">
-        <h1 className="p-4 font-bold text-xl">Clients List</h1>
+        <div className="flex justify-between items-center p-4">
+          <h1 className="p-4 font-bold text-xl">Clients List</h1>
+
+          <button className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors">
+            Add New Client
+          </button>
+        </div>
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>

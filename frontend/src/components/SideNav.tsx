@@ -1,7 +1,10 @@
-// import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { FiUsers, FiCalendar, FiLogOut } from "react-icons/fi";
 import { BsCardChecklist, BsListCheck } from "react-icons/bs";
+import { MdAddHomeWork } from "react-icons/md";
+import { useDispatch } from "react-redux";
+import { toast } from "sonner";
+import { logoutUser } from "../app/authSlice";
 
 interface NavItemProps {
   to: string;
@@ -26,6 +29,12 @@ const NavItem = ({ to, icon, label }: NavItemProps) => {
 };
 
 const SideNav: React.FC = () => {
+  const dispatch = useDispatch();
+  const logout = () => {
+    dispatch(logoutUser());
+    toast.success("Logged out successfully");
+  };
+
   return (
     <div className="flex flex-col h-screen bg-indigo-600 text-white w-64 p-4">
       <div className="flex items-center mb-8">
@@ -37,6 +46,7 @@ const SideNav: React.FC = () => {
       </div>
 
       <div className="flex-1 flex flex-col space-y-1">
+        <NavItem to="/doctor" icon={<MdAddHomeWork />} label="Home" />
         <NavItem to="/doctor/clients" icon={<FiUsers />} label="Clients" />
         <NavItem
           to="/doctor/programs"
@@ -57,10 +67,7 @@ const SideNav: React.FC = () => {
 
       <button
         className="flex items-center px-4 py-3 mt-auto text-white hover:bg-red-700 hover:text-white transition-colors rounded-md"
-        onClick={() => {
-          // Add logout functionality here
-          console.log("Logging out...");
-        }}
+        onClick={logout}
       >
         <span className="mr-3 text-xl">
           <FiLogOut />

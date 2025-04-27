@@ -1,55 +1,36 @@
 import "dotenv/config";
 import { verify } from "hono/jwt";
 import { Context, Next } from "hono";
-import { ne } from "drizzle-orm";
 
-interface HonoRequest<T, U> {
-  user?: T;
-  // Add other properties if needed
-}
-
-// AUTHRNICATION MIDDLEWARE
 export const verifyToken = async (token: string, secret: string) => {
   try {
-    const decoded = await verify(token as string, secret);
+    const decoded = await verify(token, secret);
     return decoded;
-  } catch (error: any) {
+  } catch (error) {
     return null;
   }
 };
 
-// AUTHORIZATION MIDDLEWARE
 export const authMiddleware = async (
-  c: Context & { req: HonoRequest<any, unknown> },
+  c: Context,
   next: Next,
   requiredRole: string
 ) => {
-  const token = c.req.header("Authorization");
+  const token = c.req.header("Authorization")?.replace("Bearer ", "");
 
-  if (!token) return c.json({ error: "Token is required" }, 401);
-  const decoded = await verifyToken(
-    token as string,
-    process.env.JWT_SECRET as string
-  );
+  if (!token) return c.json({ error: "Token not provided" }, 401);
+
+  const decoded = await verifyToken(token, process.env.JWT_SECRET as string);
 
   if (!decoded) return c.json({ error: "Invalid token" }, 401);
 
-  if (requiredRole === "both") {
-    if (decoded.role === "admin" || decoded.role === "user") {
-      c.req.user = decoded;
-      return next();
-    }
-  } else if (decoded.role === requiredRole) {
-    c.req.user = decoded;
-    return next();
-  }
+  if (decoded.role !== requiredRole)
+    return c.json({ error: "Unauthorized" }, 403);
 
-  return c.json({ error: "Unauthorized" }, 401);
+  return next();
 };
 
 export const adminRoleAuth = async (c: Context, next: Next) =>
   await authMiddleware(c, next, "admin");
 export const doctorRoleAuth = async (c: Context, next: Next) =>
-  await authMiddleware(c, next, "user");
-export const bothRoleAuth = async (c: Context, next: Next) =>
-  await authMiddleware(c, next, "both");
+  await authMiddleware(c, next, "Doctor");

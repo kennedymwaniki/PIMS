@@ -6,10 +6,16 @@ import SummaryPage from "./pages/SummaryPage";
 import Patientslist from "./components/Patientslist";
 import ProgramsList from "./components/ProgramsList";
 import AppointmentsList from "./components/AppointmentsList";
+import ClientsProfile from "./components/ClientsProfile";
+import Enrollmentslist from "./components/Enrollmentslist";
 
 const router = createBrowserRouter([
   {
     path: "/",
+    element: <Login />,
+  },
+  {
+    path: "/login",
     element: <Login />,
   },
   {
@@ -29,6 +35,10 @@ const router = createBrowserRouter([
             element: <Patientslist />,
           },
           {
+            path: "clients/:clientId",
+            element: <ClientsProfile />,
+          },
+          {
             path: "programs",
             element: <ProgramsList />,
           },
@@ -38,7 +48,7 @@ const router = createBrowserRouter([
           },
           {
             path: "enrollments",
-            element: <div>Enrollments Page</div>, // Temporary placeholder until you create an enrollments component
+            element: <Enrollmentslist />,
           },
         ],
       },
