@@ -4,7 +4,7 @@
 
 > ## ⚠️ 📢 IMPORTANT API NOTICE 📢 ⚠️
 >
-> **The backend API (https://pim-backend-5zbm.onrender.com/api) is deployed on Render's free tier, which has the following limitations:**
+> **The backend API (https://pim-backend-5zbm.onrender.com) is deployed on Render's free tier, which has the following limitations:**
 >
 > - 🔄 **Sleep Mode**: The server automatically spins down after periods of inactivity
 > - ⏱️ **Cold Start Delay**: First requests after inactivity may take **50-60 seconds** to respond
@@ -12,6 +12,8 @@
 > - 🔁 **Subsequent Requests**: Once awake, the server will respond normally with fast response times
 >
 > This is normal behavior for free-tier services and not an indication of application errors.
+
+> ### 🌐 **Live Fronend Application**: [https://pims-rosy.vercel.app/](https://pims-rosy.vercel.app/)
 
 ## Overview
 
