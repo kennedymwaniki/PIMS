@@ -8,11 +8,16 @@ import ProgramsList from "./components/ProgramsList";
 import AppointmentsList from "./components/AppointmentsList";
 import ClientsProfile from "./components/ClientsProfile";
 import Enrollmentslist from "./components/Enrollmentslist";
+import Registration from "./pages/Registration";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Login />,
+  },
+  {
+    path: "/register",
+    element: <Registration />,
   },
   {
     path: "/login",
