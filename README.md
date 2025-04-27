@@ -228,26 +228,26 @@ Authorization: Bearer YOUR_TOKEN_HERE
 ```javascript
 // Example using Fetch API
 const fetchClients = async () => {
-  const response = await fetch('http://your-api-url/api/clients', {
-    method: 'GET',
+  const response = await fetch("http://your-api-url/api/clients", {
+    method: "GET",
     headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer YOUR_JWT_TOKEN_HERE'
-    }
+      "Content-Type": "application/json",
+      Authorization: "Bearer YOUR_JWT_TOKEN_HERE",
+    },
   });
-  
+
   const data = await response.json();
   return data;
 };
 
 // Example using Axios
 const fetchClients = async () => {
-  const response = await axios.get('http://your-api-url/api/clients', {
+  const response = await axios.get("http://your-api-url/api/clients", {
     headers: {
-      'Authorization': 'Bearer YOUR_JWT_TOKEN_HERE'
-    }
+      Authorization: "Bearer YOUR_JWT_TOKEN_HERE",
+    },
   });
-  
+
   return response.data;
 };
 ```
