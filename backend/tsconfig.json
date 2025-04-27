@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "module": "ESNext",
+    "module": "CommonJS",
     "moduleResolution": "Node",
     "rootDir": "./src",
     "outDir": "./dist",
@@ -12,7 +12,7 @@
     "forceConsistentCasingInFileNames": true,
     "types": ["node"],
     "jsx": "react-jsx",
-    "jsxImportSource": "hono/jsx"
+    "jsxImportSource": "hono/jsx",
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "dist"]
