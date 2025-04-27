@@ -210,6 +210,54 @@ From the client's profile, you can view all their appointments including the sta
 4. Set the enrollment date and status.
 5. Click "Enroll in Program" to confirm.
 
+## Authentication and API Access
+
+### Token Authentication
+
+All API endpoints (except login and registration) are protected and require authentication. To access these endpoints:
+
+1. First, obtain a token by logging in through the `/api/auth/login` endpoint.
+2. Include the token in the header of all subsequent requests using the following format:
+
+```
+Authorization: Bearer YOUR_TOKEN_HERE
+```
+
+### Example API Request with Authentication
+
+```javascript
+// Example using Fetch API
+const fetchClients = async () => {
+  const response = await fetch('http://your-api-url/api/clients', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer YOUR_JWT_TOKEN_HERE'
+    }
+  });
+  
+  const data = await response.json();
+  return data;
+};
+
+// Example using Axios
+const fetchClients = async () => {
+  const response = await axios.get('http://your-api-url/api/clients', {
+    headers: {
+      'Authorization': 'Bearer YOUR_JWT_TOKEN_HERE'
+    }
+  });
+  
+  return response.data;
+};
+```
+
+### Token Expiration
+
+- JWT tokens have an expiration time (typically 24 hours)
+- When a token expires, you will receive a 401 (Unauthorized) response
+- If this happens, redirect the user to the login page to obtain a new token
+
 ## Backend API Reference
 
 ### Authentication Endpoints
@@ -218,6 +266,7 @@ From the client's profile, you can view all their appointments including the sta
 
 - **URL**: `/api/auth/login`
 - **Method**: `POST`
+- **Authentication**: Not required
 - **Payload**:
 
 ```json
@@ -241,27 +290,59 @@ From the client's profile, you can view all their appointments including the sta
 }
 ```
 
+#### Register
+
+- **URL**: `/api/auth/register`
+- **Method**: `POST`
+- **Authentication**: Not required
+- **Payload**:
+
+```json
+{
+  "email": "kennedymk128@gmail.com",
+  "password": "12345678",
+  "name": "Kimberly mainsely",
+  "contact": "11111111118"
+}
+```
+
+**Note**: All new users are registered with the "Doctor" role by default.
+
+- **Response**:
+
+```json
+{
+  "message": "User created successfully",
+  "user": {
+    "id": 2,
+    "name": "Kimberly mainsely",
+    "email": "kennedymk128@gmail.com",
+    "role": "Doctor"
+  }
+}
+```
+
 ### Client Endpoints
 
 #### Get All Clients
 
 - **URL**: `/api/clients`
 - **Method**: `GET`
-- **Authorization**: Bearer Token
+- **Authentication**: Required (Bearer Token)
 - **Response**: List of all clients
 
 #### Get Client by ID
 
 - **URL**: `/api/clients/:id`
 - **Method**: `GET`
-- **Authorization**: Bearer Token
+- **Authentication**: Required (Bearer Token)
 - **Response**: Detailed client information including appointments and enrollments
 
 #### Create Client
 
 - **URL**: `/api/clients`
 - **Method**: `POST`
-- **Authorization**: Bearer Token
+- **Authentication**: Required (Bearer Token)
 - **Payload**:
 
 ```json
@@ -281,7 +362,7 @@ From the client's profile, you can view all their appointments including the sta
 
 - **URL**: `/api/clients/:id`
 - **Method**: `PATCH`
-- **Authorization**: Bearer Token
+- **Authentication**: Required (Bearer Token)
 - **Payload**: Fields to update (any of the fields from create client)
 - **Response**: Updated client object
 
@@ -289,7 +370,7 @@ From the client's profile, you can view all their appointments including the sta
 
 - **URL**: `/api/clients/:id`
 - **Method**: `DELETE`
-- **Authorization**: Bearer Token
+- **Authentication**: Required (Bearer Token)
 - **Response**: Confirmation message
 
 ### Appointment Endpoints
@@ -298,14 +379,14 @@ From the client's profile, you can view all their appointments including the sta
 
 - **URL**: `/api/appointments`
 - **Method**: `GET`
-- **Authorization**: Bearer Token
+- **Authentication**: Required (Bearer Token)
 - **Response**: List of all appointments
 
 #### Create Appointment
 
 - **URL**: `/api/appointments`
 - **Method**: `POST`
-- **Authorization**: Bearer Token
+- **Authentication**: Required (Bearer Token)
 - **Payload**:
 
 ```json
@@ -324,7 +405,7 @@ From the client's profile, you can view all their appointments including the sta
 
 - **URL**: `/api/appointments/:id`
 - **Method**: `PATCH`
-- **Authorization**: Bearer Token
+- **Authentication**: Required (Bearer Token)
 - **Payload**: Fields to update (any of the fields from create appointment)
 - **Response**: Updated appointment object
 
@@ -334,14 +415,14 @@ From the client's profile, you can view all their appointments including the sta
 
 - **URL**: `/api/programs`
 - **Method**: `GET`
-- **Authorization**: Bearer Token
+- **Authentication**: Required (Bearer Token)
 - **Response**: List of all programs
 
 #### Create Program
 
 - **URL**: `/api/programs`
 - **Method**: `POST`
-- **Authorization**: Bearer Token
+- **Authentication**: Required (Bearer Token)
 - **Payload**:
 
 ```json
@@ -360,7 +441,7 @@ From the client's profile, you can view all their appointments including the sta
 
 - **URL**: `/api/programs/:id`
 - **Method**: `PATCH`
-- **Authorization**: Bearer Token
+- **Authentication**: Required (Bearer Token)
 - **Payload**: Fields to update (any of the fields from create program)
 - **Response**: Updated program object
 
@@ -370,14 +451,14 @@ From the client's profile, you can view all their appointments including the sta
 
 - **URL**: `/api/enrollments`
 - **Method**: `GET`
-- **Authorization**: Bearer Token
+- **Authentication**: Required (Bearer Token)
 - **Response**: List of all enrollments
 
 #### Create Enrollment
 
 - **URL**: `/api/enrollments`
 - **Method**: `POST`
-- **Authorization**: Bearer Token
+- **Authentication**: Required (Bearer Token)
 - **Payload**:
 
 ```json
@@ -395,7 +476,7 @@ From the client's profile, you can view all their appointments including the sta
 
 - **URL**: `/api/enrollments/:id`
 - **Method**: `PATCH`
-- **Authorization**: Bearer Token
+- **Authentication**: Required (Bearer Token)
 - **Payload**: Fields to update (status, etc.)
 - **Response**: Updated enrollment object
 
@@ -405,7 +486,7 @@ From the client's profile, you can view all their appointments including the sta
 
 - **URL**: `/api/users`
 - **Method**: `GET`
-- **Authorization**: Bearer Token
+- **Authentication**: Required (Bearer Token)
 - **Response**: List of all users (doctors, admins)
 
 ## Technical Architecture

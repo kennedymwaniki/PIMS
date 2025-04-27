@@ -6,15 +6,18 @@ import {
   updateAppointment,
   deleteAppointment,
 } from "./appointment.controller";
-// import { bearerAuth } from "../middleware/authBearer"; // Uncomment if auth is needed
+import { doctorRoleAuth } from "../middleware/authBearer";
 
 export const appointmentRouter = new Hono();
 
-// Public routes (or apply middleware selectively)
-appointmentRouter.get("/appointments", getAllAppointments);
+appointmentRouter.get("/appointments", doctorRoleAuth, getAllAppointments);
 appointmentRouter.post("/appointments", createAppointment);
 
 // Routes requiring ID
-appointmentRouter.get("/appointments/:id", getAppointmentById);
-appointmentRouter.patch("/appointments/:id", updateAppointment);
-appointmentRouter.delete("/appointments/:id", deleteAppointment);
+appointmentRouter.get("/appointments/:id", doctorRoleAuth, getAppointmentById);
+appointmentRouter.patch("/appointments/:id", doctorRoleAuth, updateAppointment);
+appointmentRouter.delete(
+  "/appointments/:id",
+  doctorRoleAuth,
+  deleteAppointment
+);

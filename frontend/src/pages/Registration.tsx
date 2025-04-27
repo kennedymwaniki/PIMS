@@ -10,7 +10,7 @@ import { toast } from "sonner";
 type FormValues = {
   email: string;
   password: string;
-  role: "Doctor" | "admin";
+  role: "Doctor"; // Changed from "Doctor" | "admin" to just "Doctor"
   name: string;
   contact: string;
 };
@@ -23,9 +23,9 @@ type Notification = {
 type FormErrors = {
   email?: string;
   password?: string;
-  role?: string;
   name?: string;
   contact?: string;
+  // Removed role from FormErrors
 };
 
 const Registration = () => {
@@ -34,6 +34,7 @@ const Registration = () => {
   const [notification, setNotification] = useState<Notification | null>(null);
   const [showPassword, setShowPassword] = useState(false);
 
+  // Always set role to "Doctor" by default
   const { register, handleSubmit } = useForm<FormValues>({
     defaultValues: {
       role: "Doctor",
@@ -43,7 +44,12 @@ const Registration = () => {
 
   const registerUser = async (data: FormValues) => {
     try {
-      const response = await api.post("/auth/register", data);
+      // Ensure role is set to "Doctor" regardless of form input
+      const payload = {
+        ...data,
+        role: "Doctor" as const,
+      };
+      const response = await api.post("/auth/register", payload);
       return response.data;
     } catch (err) {
       if (axios.isAxiosError(err)) {
@@ -222,28 +228,6 @@ const Registration = () => {
               </div>
               {error?.contact && (
                 <div className="text-red-500 text-sm mt-1">{error.contact}</div>
-              )}
-            </div>
-
-            <div>
-              <label
-                htmlFor="role"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                Role
-              </label>
-              <div className="relative">
-                <select
-                  id="role"
-                  {...register("role", { required: true })}
-                  className="block w-full px-4 py-3 border border-gray-300 rounded-md text-gray-900 focus:ring-[#454BE7] focus:border-[#454BE7]"
-                >
-                  <option value="Doctor">Doctor</option>
-                  <option value="admin">Admin</option>
-                </select>
-              </div>
-              {error?.role && (
-                <div className="text-red-500 text-sm mt-1">{error.role}</div>
               )}
             </div>
 

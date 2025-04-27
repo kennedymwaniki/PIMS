@@ -6,15 +6,15 @@ import {
   updateUserById,
   deleteUser,
 } from "./users.controller";
-// import { adminRoleAuth, doctorRoleAuth, bothRoleAuth } from "../middleware/authBearer"; // Uncomment and use appropriate auth middleware
+import { doctorRoleAuth } from "../middleware/authBearer";
 
 const userRouter = new Hono();
 
-userRouter.get("/users", getAllUsers);
+userRouter.get("/users", doctorRoleAuth, getAllUsers);
 userRouter.post("/users", createNewUser);
 
-userRouter.get("/users/:id", getUser);
-userRouter.patch("/users/:id", updateUserById);
-userRouter.delete("/users/:id", deleteUser);
+userRouter.get("/users/:id", doctorRoleAuth, getUser);
+userRouter.patch("/users/:id", doctorRoleAuth, updateUserById);
+userRouter.delete("/users/:id", doctorRoleAuth, deleteUser);
 
 export default userRouter;

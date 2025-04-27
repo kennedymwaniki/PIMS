@@ -6,16 +6,17 @@ import {
   updateClient,
   deleteClient,
 } from "./clients.controller";
+import { doctorRoleAuth } from "../middleware/authBearer";
 
 const clientRouter = new Hono();
 
 // Public routes (or apply middleware selectively)
-clientRouter.get("/clients", getAllClients);
-clientRouter.post("/clients", createClient);
+clientRouter.get("/clients", doctorRoleAuth, getAllClients);
+clientRouter.post("/clients", doctorRoleAuth, createClient);
 
 //
-clientRouter.get("/clients/:id", getClientById);
-clientRouter.patch("/clients/:id", updateClient);
-clientRouter.delete("/clients/:id", deleteClient);
+clientRouter.get("/clients/:id", doctorRoleAuth, getClientById);
+clientRouter.patch("/clients/:id", doctorRoleAuth, updateClient);
+clientRouter.delete("/clients/:id", doctorRoleAuth, deleteClient);
 
 export default clientRouter;

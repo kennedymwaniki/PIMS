@@ -5,9 +5,10 @@ import {
   createProgram,
   updateProgram,
 } from "./program.controller";
+import { doctorRoleAuth } from "../middleware/authBearer";
 
 export const programRouter = new Hono();
 
-programRouter.get("/programs", getPrograms);
-programRouter.post("/programs", createProgram);
-programRouter.patch("/programs/:id", updateProgram);
+programRouter.get("/programs", doctorRoleAuth, getPrograms);
+programRouter.post("/programs", doctorRoleAuth, createProgram);
+programRouter.patch("/programs/:id", doctorRoleAuth, updateProgram);
