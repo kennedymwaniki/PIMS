@@ -3,7 +3,7 @@
     "target": "ESNext",
     "module": "CommonJS",
     "moduleResolution": "Node",
-    "rootDir": "./",
+    "rootDir": "./src",
     "outDir": "./dist",
     "lib": ["ESNext"],
     "strict": true,
@@ -14,5 +14,6 @@
     "jsx": "react-jsx",
     "jsxImportSource": "hono/jsx",
   },
-  "exclude": ["node_modules"]
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "dist"]
 }
