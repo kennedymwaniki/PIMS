@@ -9,9 +9,8 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Provider store={store}>
       <Toaster
-        position="top-right"
+        position="top-center"
         richColors
-        closeButton
         duration={3000}
         expand={false}
         theme="light"

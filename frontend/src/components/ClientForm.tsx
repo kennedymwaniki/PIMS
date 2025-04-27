@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { CreateClientRequest } from "../types/types";
 import { createClient } from "../services/ClientServices";
+import { toast } from "sonner";
 
 interface ClientFormProps {
   onClose: () => void;
@@ -15,16 +16,22 @@ const ClientForm = ({ onClose, onSuccess }: ClientFormProps) => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<CreateClientRequest>();
+  } = useForm<CreateClientRequest>({
+    defaultValues: {
+      gender: "unspecified",
+    },
+  });
 
   const onSubmit = async (data: CreateClientRequest) => {
     try {
       setIsSubmitting(true);
       await createClient(data);
+      toast.success("Client created successfully");
       onSuccess();
       onClose();
     } catch (error) {
       console.error("Error submitting client:", error);
+      toast.error("Failed to create client");
     } finally {
       setIsSubmitting(false);
     }
@@ -32,80 +39,98 @@ const ClientForm = ({ onClose, onSuccess }: ClientFormProps) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-      <div className="flex items-center gap-8">
-        <div className="w-full">
-          <label
-            htmlFor="fullname"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Full Name
-          </label>
-          <input
-            id="fullname"
-            type="text"
-            {...register("fullname", { required: "Full name is required" })}
-            className={`mt-1 block w-full rounded-md border ${
-              errors.fullname ? "border-red-500" : "border-gray-300"
-            } shadow-sm p-2 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50`}
-          />
-          {errors.fullname && (
-            <p className="mt-1 text-sm text-red-600">
-              {errors.fullname.message}
-            </p>
-          )}
-        </div>
-
-        <div className="w-full">
-          <label
-            htmlFor="email"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Email
-          </label>
-          <input
-            id="email"
-            type="email"
-            {...register("email", {
-              required: "Email is required",
-              pattern: {
-                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                message: "Invalid email address",
-              },
-            })}
-            className={`mt-1 block w-full rounded-md border ${
-              errors.email ? "border-red-500" : "border-gray-300"
-            } shadow-sm p-2 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50`}
-          />
-          {errors.email && (
-            <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
-          )}
-        </div>
+      <div>
+        <label
+          htmlFor="fullname"
+          className="block text-sm font-medium text-gray-700"
+        >
+          Full Name
+        </label>
+        <input
+          id="fullname"
+          type="text"
+          {...register("fullname", { required: "Full name is required" })}
+          className={`mt-1 block w-full rounded-md border ${
+            errors.fullname ? "border-red-500" : "border-gray-300"
+          } shadow-sm p-2 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50`}
+        />
+        {errors.fullname && (
+          <p className="mt-1 text-sm text-red-600">{errors.fullname.message}</p>
+        )}
       </div>
 
       <div>
         <label
-          htmlFor="phone"
+          htmlFor="email"
           className="block text-sm font-medium text-gray-700"
         >
-          Phone Number
+          Email
         </label>
         <input
-          id="phone"
-          type="tel"
-          {...register("phone", {
-            required: "Phone number is required",
+          id="email"
+          type="email"
+          {...register("email", {
+            required: "Email is required",
             pattern: {
-              value: /^[0-9]{10,}$/,
-              message: "Phone number must be at least 10 digits",
+              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+              message: "Invalid email address",
             },
           })}
           className={`mt-1 block w-full rounded-md border ${
-            errors.phone ? "border-red-500" : "border-gray-300"
+            errors.email ? "border-red-500" : "border-gray-300"
           } shadow-sm p-2 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50`}
         />
-        {errors.phone && (
-          <p className="mt-1 text-sm text-red-600">{errors.phone.message}</p>
+        {errors.email && (
+          <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
         )}
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label
+            htmlFor="phone"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Phone Number
+          </label>
+          <input
+            id="phone"
+            type="tel"
+            {...register("phone", {
+              required: "Phone number is required",
+              pattern: {
+                value: /^[0-9]{10,}$/,
+                message: "Phone number must be at least 10 digits",
+              },
+            })}
+            className={`mt-1 block w-full rounded-md border ${
+              errors.phone ? "border-red-500" : "border-gray-300"
+            } shadow-sm p-2 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50`}
+          />
+          {errors.phone && (
+            <p className="mt-1 text-sm text-red-600">{errors.phone.message}</p>
+          )}
+        </div>
+
+        <div>
+          <label
+            htmlFor="dob"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Date of Birth
+          </label>
+          <input
+            id="dob"
+            type="date"
+            {...register("dob", { required: "Date of birth is required" })}
+            className={`mt-1 block w-full rounded-md border ${
+              errors.dob ? "border-red-500" : "border-gray-300"
+            } shadow-sm p-2 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50`}
+          />
+          {errors.dob && (
+            <p className="mt-1 text-sm text-red-600">{errors.dob.message}</p>
+          )}
+        </div>
       </div>
 
       <div>
@@ -125,26 +150,6 @@ const ClientForm = ({ onClose, onSuccess }: ClientFormProps) => {
         />
         {errors.address && (
           <p className="mt-1 text-sm text-red-600">{errors.address.message}</p>
-        )}
-      </div>
-
-      <div>
-        <label
-          htmlFor="dob"
-          className="block text-sm font-medium text-gray-700"
-        >
-          Date of Birth
-        </label>
-        <input
-          id="dob"
-          type="date"
-          {...register("dob", { required: "Date of birth is required" })}
-          className={`mt-1 block w-full rounded-md border ${
-            errors.dob ? "border-red-500" : "border-gray-300"
-          } shadow-sm p-2 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50`}
-        />
-        {errors.dob && (
-          <p className="mt-1 text-sm text-red-600">{errors.dob.message}</p>
         )}
       </div>
 
