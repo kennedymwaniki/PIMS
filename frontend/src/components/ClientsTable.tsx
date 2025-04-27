@@ -55,7 +55,6 @@ const ClientsTable = () => {
     fetchClients();
   };
 
-  // Filter clients based on search query
   const filteredClients = clients.filter((client) =>
     client.fullname.toLowerCase().includes(searchQuery.toLowerCase())
   );

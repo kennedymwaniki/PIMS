@@ -51,7 +51,6 @@ export const createAppointment = async (c: Context) => {
   try {
     const appointmentData: TIAppointments = await c.req.json();
 
-    // Basic validation (add more specific checks as needed)
     if (
       !appointmentData.clientId ||
       !appointmentData.doctorId ||
@@ -75,7 +74,6 @@ export const createAppointment = async (c: Context) => {
       return c.json({ error: "Failed to create appointment" }, 500);
     }
 
-    // Drizzle insert often returns an array, adjust based on actual return type if needed
     const createdAppointment = Array.isArray(newAppointmentResult)
       ? newAppointmentResult[0]
       : newAppointmentResult;
