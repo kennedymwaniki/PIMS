@@ -4,36 +4,53 @@ import { toast } from "sonner";
 import { format, parseISO } from "date-fns";
 import { getAllClients } from "../services/ClientServices";
 import { ClientResponse } from "../types/types";
+import Modal from "./Modal";
+import ClientForm from "./ClientForm";
 
 const ClientsTable = () => {
   const [clients, setClients] = useState<ClientResponse[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const navigate = useNavigate();
 
+  const fetchClients = async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await getAllClients();
+      setClients(response);
+      toast.success("Clients loaded successfully");
+    } catch (error) {
+      setError(
+        error instanceof Error ? error.message : "Failed to fetch clients"
+      );
+      toast.error("An error occurred while fetching clients");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchClients = async () => {
-      setLoading(true);
-      setError(null);
-
-      try {
-        const response = await getAllClients();
-        setClients(response);
-      } catch (error) {
-        setError(
-          error instanceof Error ? error.message : "Failed to fetch clients"
-        );
-        toast.error("An error occurred while fetching clients");
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchClients();
   }, []);
 
   const handleViewPatient = (clientId: number) => {
     navigate(`${clientId}`);
+  };
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleClientSuccess = () => {
+    toast.success("Client created successfully");
+    fetchClients();
   };
 
   if (loading) {
@@ -64,6 +81,21 @@ const ClientsTable = () => {
     return (
       <div className="flex flex-col items-center justify-center py-8">
         <p className="mt-4 text-gray-500">No clients found</p>
+        <button
+          onClick={handleOpenModal}
+          className="mt-4 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors"
+        >
+          Add New Client
+        </button>
+
+        {isModalOpen && (
+          <Modal title="Add New Client" onClose={handleCloseModal}>
+            <ClientForm
+              onClose={handleCloseModal}
+              onSuccess={handleClientSuccess}
+            />
+          </Modal>
+        )}
       </div>
     );
   }
@@ -74,7 +106,10 @@ const ClientsTable = () => {
         <div className="flex justify-between items-center p-4">
           <h1 className="p-4 font-bold text-xl">Clients List</h1>
 
-          <button className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors">
+          <button
+            onClick={handleOpenModal}
+            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors"
+          >
             Add New Client
           </button>
         </div>
@@ -141,6 +176,15 @@ const ClientsTable = () => {
           </tbody>
         </table>
       </div>
+
+      {isModalOpen && (
+        <Modal title="Add New Client" onClose={handleCloseModal}>
+          <ClientForm
+            onClose={handleCloseModal}
+            onSuccess={handleClientSuccess}
+          />
+        </Modal>
+      )}
     </div>
   );
 };

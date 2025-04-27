@@ -37,7 +37,7 @@ export const getProgramById = async (id: number): Promise<ProgramResponse> => {
 // Create a new program
 export const createProgram = async (
   programData: CreateProgramRequest
-): Promise<ProgramResponse> => {
+): Promise<UpdateProgramRequest> => {
   try {
     const response = await api.post("/programs", programData);
     if (!response.data) {

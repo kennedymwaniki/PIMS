@@ -3,32 +3,49 @@ import { toast } from "sonner";
 import { format, parseISO } from "date-fns";
 import { getAllPrograms } from "../services/programsService";
 import { ProgramResponse } from "../types/types";
+import Modal from "./Modal";
+import ProgramForm from "./ProgramForm";
 
 const ProgramsTable = () => {
   const [programs, setPrograms] = useState<ProgramResponse[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+  const fetchPrograms = async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await getAllPrograms();
+      setPrograms(response);
+      toast.success("Programs loaded successfully");
+    } catch (error) {
+      setError(
+        error instanceof Error ? error.message : "Failed to fetch programs"
+      );
+      toast.error("An error occurred while fetching programs");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchPrograms = async () => {
-      setLoading(true);
-      setError(null);
-
-      try {
-        const response = await getAllPrograms();
-        setPrograms(response);
-      } catch (error) {
-        setError(
-          error instanceof Error ? error.message : "Failed to fetch programs"
-        );
-        toast.error("An error occurred while fetching programs");
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchPrograms();
   }, []);
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleProgramSuccess = () => {
+    toast.success("Program created successfully");
+    fetchPrograms();
+  };
 
   if (loading) {
     return (
@@ -58,6 +75,21 @@ const ProgramsTable = () => {
     return (
       <div className="flex flex-col items-center justify-center py-8">
         <p className="mt-4 text-gray-500">No programs found</p>
+        <button
+          onClick={handleOpenModal}
+          className="mt-4 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors"
+        >
+          Add New Program
+        </button>
+
+        {isModalOpen && (
+          <Modal title="Add New Program" onClose={handleCloseModal}>
+            <ProgramForm
+              onClose={handleCloseModal}
+              onSuccess={handleProgramSuccess}
+            />
+          </Modal>
+        )}
       </div>
     );
   }
@@ -67,7 +99,10 @@ const ProgramsTable = () => {
       <div className="overflow-x-auto">
         <div className="flex justify-between items-center p-4">
           <h1 className="font-bold text-xl">Programs List</h1>
-          <button className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors">
+          <button
+            onClick={handleOpenModal}
+            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors"
+          >
             Add New Program
           </button>
         </div>
@@ -131,6 +166,15 @@ const ProgramsTable = () => {
           </tbody>
         </table>
       </div>
+
+      {isModalOpen && (
+        <Modal title="Add New Program" onClose={handleCloseModal}>
+          <ProgramForm
+            onClose={handleCloseModal}
+            onSuccess={handleProgramSuccess}
+          />
+        </Modal>
+      )}
     </div>
   );
 };
