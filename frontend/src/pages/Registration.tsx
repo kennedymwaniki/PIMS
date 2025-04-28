@@ -139,7 +139,7 @@ const Registration = () => {
       <div className="w-full lg:w-1/2 flex flex-col justify-center px-6 py-12 lg:px-16">
         <div className="lg:hidden flex items-center justify-center mb-10">
           <div className="flex items-center gap-2">
-            <span className="text-xl font-bold text-[#454BE7]">CarePulse</span>
+            <span className="text-xl font-bold text-[#454BE7]">CHIMS</span>
           </div>
         </div>
 
