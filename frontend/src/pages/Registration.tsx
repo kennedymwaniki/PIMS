@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { Heart, Pill, Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import api from "../axios";
 import axios from "axios";
 import care from "../assets/doctors.jpeg";
@@ -10,7 +10,7 @@ import { toast } from "sonner";
 type FormValues = {
   email: string;
   password: string;
-  role: "Doctor"; // Changed from "Doctor" | "admin" to just "Doctor"
+  role: "Doctor";
   name: string;
   contact: string;
 };
@@ -34,7 +34,6 @@ const Registration = () => {
   const [notification, setNotification] = useState<Notification | null>(null);
   const [showPassword, setShowPassword] = useState(false);
 
-  // Always set role to "Doctor" by default
   const { register, handleSubmit } = useForm<FormValues>({
     defaultValues: {
       role: "Doctor",
@@ -44,7 +43,6 @@ const Registration = () => {
 
   const registerUser = async (data: FormValues) => {
     try {
-      // Ensure role is set to "Doctor" regardless of form input
       const payload = {
         ...data,
         role: "Doctor" as const,
@@ -90,7 +88,7 @@ const Registration = () => {
         type: "success",
       });
 
-      // Redirect to login page after successful registration
+      // redirect to login page after successful registration
       setTimeout(() => {
         navigate("/login");
       }, 2000);
@@ -141,10 +139,6 @@ const Registration = () => {
       <div className="w-full lg:w-1/2 flex flex-col justify-center px-6 py-12 lg:px-16">
         <div className="lg:hidden flex items-center justify-center mb-10">
           <div className="flex items-center gap-2">
-            <div className="relative h-8 w-8">
-              <Heart className="text-[#454BE7] absolute" size={24} />
-              <Pill className="text-[#454BE7] absolute" size={24} />
-            </div>
             <span className="text-xl font-bold text-[#454BE7]">CarePulse</span>
           </div>
         </div>

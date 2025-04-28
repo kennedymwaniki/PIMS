@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../app/authSlice";
-import { Heart, Pill, Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import api from "../axios";
 import axios from "axios";
 import care from "../assets/doctors.jpeg";
@@ -75,11 +75,10 @@ const Login = () => {
       if (response.user.role === "Doctor") {
         navigate("/doctor");
       }
-      if (response.user.role === "admin") {
-        navigate("/admin");
-      }
+      // if (response.user.role === "admin") {
+      //   navigate("/admin");
+      // }
     } catch (err) {
-      // Error handling
       const errorMessage =
         err instanceof Error ? err.message : "An unexpected error occurred";
 
@@ -125,11 +124,7 @@ const Login = () => {
       <div className="w-full lg:w-1/2 flex flex-col justify-center px-6 py-12 lg:px-16">
         <div className="lg:hidden flex items-center justify-center mb-10">
           <div className="flex items-center gap-2">
-            <div className="relative h-8 w-8">
-              <Heart className="text-[#454BE7] absolute" size={24} />
-              <Pill className="text-[#454BE7] absolute" size={24} />
-            </div>
-            <span className="text-xl font-bold text-[#454BE7]">CarePulse</span>
+            <span className="text-xl font-bold text-[#454BE7]">CHIMS</span>
           </div>
         </div>
 
